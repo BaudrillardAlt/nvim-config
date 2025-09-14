@@ -3,20 +3,20 @@ local opt = vim.opt
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 
--- vim.g.neovide_refresh_rate = 70
--- vim.g.neovide_fullscreen = false
---
--- if vim.g.neovide then
---   opt.columns = 200 -- width  (⌊2560 px / 12.8 px⌋)
---   opt.lines = 86 -- height (⌊ 800 px / 16.67 px⌋)
--- end
+vim.g.neovide_refresh_rate = 70
+vim.g.neovide_fullscreen = false
+
+if vim.g.neovide then
+  opt.columns = 200 -- width  (⌊2560 px / 12.8 px⌋)
+  opt.lines = 86 -- height (⌊ 800 px / 16.67 px⌋)
+end
 
 opt.autowrite = true -- Enable auto write
 -- only set clipboard if not in ssh, to make sure the OSC 52
 -- integration works automatically. Requires Neovim >= 0.10.0
 opt.clipboard = "unnamedplus" -- Sync with system clipboard
 opt.completeopt = "menu,menuone,noselect"
-opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
+opt.conceallevel = 1
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
 opt.cursorline = true -- Enable highlighting of the current line
 opt.expandtab = true -- Use spaces instead of tabs
@@ -29,7 +29,7 @@ opt.fillchars = {
   eob = " ",
 }
 opt.foldlevel = 99
-opt.formatexpr = "v:lua.require'util'.format.formatexpr()"
+vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 opt.formatoptions = "jcroqlnt" -- tcqj
 opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"

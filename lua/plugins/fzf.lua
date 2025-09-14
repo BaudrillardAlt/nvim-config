@@ -9,7 +9,6 @@ local function symbols_filter(entry, ctx)
 end
 
 return {
-  desc = "Awesome picker for FZF (alternative to Telescope)",
   {
     "ibhagwan/fzf-lua",
     cmd = "FzfLua",
@@ -29,9 +28,7 @@ return {
       config.defaults.keymap.builtin["<c-b>"] = "preview-page-up"
 
       -- Trouble
-      if LazyVim.has("trouble.nvim") then
-        config.defaults.actions.files["ctrl-t"] = require("trouble.sources.fzf").actions.open
-      end
+      config.defaults.actions.files["ctrl-t"] = require("trouble.sources.fzf").actions.open
 
       -- Toggle root dir / cwd
       config.defaults.actions.files["ctrl-r"] = function(_, ctx)
@@ -57,6 +54,13 @@ return {
       end
 
       return {
+        fzf_bin = "sk",
+        winopts = {
+          preview = {
+            default = "bat",
+          },
+        },
+
         "default-title",
         fzf_colors = true,
         fzf_opts = {
@@ -109,18 +113,10 @@ return {
             },
           })
         end,
-        winopts = {
-          width = 0.8,
-          height = 0.8,
-          row = 0.5,
-          col = 0.5,
-          preview = {
-            scrollchars = { "┃", "" },
-          },
-        },
         files = {
+          hidden = false,
           cwd_prompt = false,
-          fd_opts = [[--type f --strip-cwd-prefix --exclude .git --exclude .jj]],
+          fd_opts = [[--type f --strip-cwd-prefix --exclude .git --exclude .jj --exclude .obsidian]],
           actions = {
             ["alt-i"] = { actions.toggle_ignore },
             ["alt-h"] = { actions.toggle_hidden },
@@ -181,18 +177,6 @@ return {
       { "<c-k>", "<c-k>", ft = "fzf", mode = "t", nowait = true },
 
       {
-        "<leader>no",
-        function()
-          require("fzf-lua").files({
-            cwd = vim.fn.expand("~/notes"),
-            fd_opts = [[--type f --hidden --strip-cwd-prefix --exclude .git --exclude ".obsidian" --exclude "Excalidraw" --extension=md]],
-            prompt = "Notes> ",
-            previewer = "builtin",
-          })
-        end,
-        desc = "Select notes",
-      },
-      {
         "<leader>,",
         "<cmd>FzfLua buffers sort_mru=true sort_lastused=true<cr>",
         desc = "Switch Buffer",
@@ -207,9 +191,6 @@ return {
       { "<leader>fg", "<cmd>FzfLua git_files<cr>", desc = "Find Files (git-files)" },
       { "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Recent" },
       { "<leader>fR", LazyVim.pick("oldfiles", { cwd = vim.uv.cwd() }), desc = "Recent (cwd)" },
-      -- git
-      { "<leader>gc", "<cmd>FzfLua git_commits<CR>", desc = "Commits" },
-      { "<leader>gs", "<cmd>FzfLua git_status<CR>", desc = "Status" },
       -- search
       { '<leader>s"', "<cmd>FzfLua registers<cr>", desc = "Registers" },
       { "<leader>sa", "<cmd>FzfLua autocmds<cr>", desc = "Auto Commands" },

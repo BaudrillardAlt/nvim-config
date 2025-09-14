@@ -38,6 +38,10 @@ return {
         },
       }
     end,
+    keys = {
+      { "ma", "va", mode = "n", remap = true, desc = "Select around textobject" },
+      { "mi", "vi", mode = "n", remap = true, desc = "Select inside textobject" },
+    },
     config = function(_, opts)
       require("mini.ai").setup(opts)
       LazyVim.on_load("which-key.nvim", function()

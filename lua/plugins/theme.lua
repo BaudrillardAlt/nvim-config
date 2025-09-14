@@ -2,16 +2,11 @@ return {
 
   {
     "scottmckendry/cyberdream.nvim",
-    lazy = true,
+    lazy = false,
     opts = {
       variant = "dark",
       italic_comments = true,
-      colors = {
-        bg = "#000000",
-        -- bg_alt = "#0f0f0f",
-        -- bg_highlight = "#1e1e1e",
-        fg = "#ffffff",
-      },
+      transparent = true,
       overrides = function(hl)
         return {
           flashbackdrop = { fg = hl.bg_highlight },
@@ -34,7 +29,6 @@ return {
     },
     config = function(_, opts)
       require("cyberdream").setup(opts)
-      require("cyberdream").load()
     end,
   },
   {
@@ -44,6 +38,7 @@ return {
     dim_inactive = true,
     opts = {
       style = "auto",
+      dim_inactive = true,
       variant = "default",
       on_highlights = function(hl, c)
         hl["@character.printf"] = { fg = c.cyan_warmer }
@@ -52,6 +47,8 @@ return {
         hl["@keyword.directive.c"] = { fg = "#ffbd5e" }
         hl["@keyword.directive.define.c"] = { fg = "#ffbd5e" }
         hl["@keyword.import.c"] = { fg = "#ffbd5e" }
+        hl.YankyPut = { link = "Search" }
+        hl.YankyYanked = { bg = c.yellow_intense, fg = c.bg_main }
       end,
     },
     config = function(_, opts)

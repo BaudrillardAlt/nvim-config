@@ -1,7 +1,7 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-vim.g.root_spec = { "lsp", { ".git", "lua" }, "cwd" }
+vim.g.root_spec = { "lsp", { ".git", ".jj", "lua" }, "cwd" }
 
 vim.g.root_lsp_ignore = { "copilot" }
 
@@ -41,7 +41,10 @@ require("lazy").setup({
     version = false, -- always use the latest git commit
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
-  checker = { enabled = false }, -- automatically check for plugin updates
+  checker = { enabled = false },
+  change_detection = {
+    notify = false,
+  },
   performance = {
     rtp = {
       -- disable some rtp plugins

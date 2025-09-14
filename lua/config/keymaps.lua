@@ -74,7 +74,7 @@ nmap("<leader>sz", function()
   })
 end, "chezmoi apply")
 
-nmap("<leader>on", ":edit ~/notes/random.md<CR>", "Open quick-notes")
+nmap("<leader>on", ":edit ~/notes/quick.md<CR>", "Open quick-note")
 
 -- better up/down
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -236,10 +236,6 @@ if vim.lsp.inlay_hint then
   Snacks.toggle.inlay_hints():map("<leader>uh")
 end
 
-map({ "n", "x" }, "<leader>gB", function() Snacks.gitbrowse() end, { desc = "Git Browse (open)" })
-map({"n", "x" }, "<leader>gY", function()
-  Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false })
-end, { desc = "Git Browse (copy)" })
 
 -- quit
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
@@ -262,7 +258,21 @@ map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 Snacks.toggle.zoom():map("<leader>wm"):map("<leader>uZ")
 Snacks.toggle.zen():map("<leader>uz")
 
-nmap("<Tab>", "<C-w>w", "Next window")
+vim.keymap.set("n", "<Tab>", function()
+  local start_win = vim.api.nvim_get_current_win()
+  local cur_win = start_win
+  repeat
+    vim.cmd("wincmd w")
+    cur_win = vim.api.nvim_get_current_win()
+    local buf = vim.api.nvim_win_get_buf(cur_win)
+    local buf_type = vim.api.nvim_buf_get_option(buf, "buftype")
+    local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
+    -- Check buffer qualifies as a “code buffer”
+    if buf_type == "" and filetype ~= "help" and filetype ~= "quickfix" then
+      return
+    end
+  until cur_win == start_win
+end, { desc = "Next code pane" })
 nmap("<S-Tab>", "<Cmd>b#<CR>", "Alternate buffer")
 nmap("<leader><Tab>", "<Cmd>FzfLua buffers<CR>", "Buffers")
 
@@ -313,10 +323,70 @@ nmap("<leader><leader>d", yank_all_diagnostics, { desc = "Yank all diagnostics t
 
 vim.keymap.set("n", "<space><space>f", function()
   vim.fn.system(
-    "zellij run -n Yazi -c -f -x 3% -y 3% --width 94% --height 94% -- bash ~/.config/nvim/yazi-picker.sh e "
+    "zellij run -n Yazi -c -i -- bash ~/.config/nvim/yazi-picker.sh"
       .. vim.fn.expand("%")
   )
 end)
 
 vim.keymap.set("n", "q", "<Nop>")
 vim.keymap.set("n", "Q", "<Nop>")
+
+
+nmap("<leader><leader>uc", function()
+  vim.cmd.colorscheme("cyberdream")
+end, { desc = "Use Cyberdream colorscheme" })
+
+nmap("<leader><leader>um", function()
+  vim.cmd.colorscheme("modus")
+end, { desc = "Use Modus colorscheme" })
+
+
+
+
+if vim.g.neovide then
+  nmap("<A-h>", "<C-w>h", "Focus left window")
+  nmap("<A-j>", "<C-w>j", "Focus down window")
+  nmap("<A-k>", "<C-w>k", "Focus up window")
+  nmap("<A-l>", "<C-w>l", "Focus right window")
+
+  nmap("<A-Enter>", "<C-w>v", "Vertical split")
+  nmap("<C-Enter>", ":enew<CR>", "New buffer")
+
+  nmap("<A-S-d>", ":bdelete<CR>", "Close buffer")
+
+  nmap("<A-Tab>", "<C-w>w", "Next window")
+
+  nmap("<A-f>", "<C-w>_|<C-w>|", "Maximize window")
+
+  nmap("<C-+>", "<C-w>+", "Increase height")
+  nmap("<C-->", "<C-w>-", "Decrease height")
+  nmap("<A-=>", "<C-w>>", "Increase width")
+  nmap("<A-[>", "<C-w><", "Decrease width")
+
+  nmap("<C-Tab>", ":bnext<CR>", "Next buffer")
+  for i = 1, 9 do
+    nmap("<A-" .. i .. ">", ":buffer " .. i .. "<CR>", "Go to buffer " .. i)
+  end
+
+  -- Move buffer: emulate by reordering in bufferline plugins or just cycle back
+  nmap("<C-A-i>", ":bprevious<CR>", "Previous buffer")
+  nmap("<C-A-o>", ":bnext<CR>", "Next buffer")
+
+  vim.keymap.set({'n','v'}, '<C-S-c>', '"+y')   -- Copy
+  vim.keymap.set({'n','v'}, '<C-S-v>', '"+P')   -- Paste normal/visual
+  vim.keymap.set('i', '<C-S-v>', '<ESC>"+pa')   -- Paste insert
+  vim.keymap.set('c', '<C-S-v>', '<C-R>+')      -- Paste command
+  vim.keymap.set('t', '<C-S-v>', '<C-R>+')      -- Paste terminal
+end
+
+
+vim.g.neovide_scale_factor = 1.0
+local change_scale_factor = function(delta)
+  vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
+end
+vim.keymap.set("n", "<C-=>", function()
+  change_scale_factor(1.25)
+end)
+vim.keymap.set("n", "<C-->", function()
+  change_scale_factor(1/1.25)
+end)
