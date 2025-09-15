@@ -24,7 +24,7 @@ return {
         },
         inlay_hints = {
           enabled = true,
-          exclude = { "vue" },
+          exclude = {},
         },
         codelens = {
           enabled = false,
@@ -42,12 +42,12 @@ return {
           timeout_ms = nil,
         },
         servers = {
-          harper_ls = {
-            filetypes = { "markdown", "text" },
-            settings = {
-              ["harper-ls"] = {},
-            },
-          },
+          -- harper_ls = {
+          --   filetypes = { "markdown", "text" },
+          --   settings = {
+          --     ["harper-ls"] = {},
+          --   },
+          -- },
           lua_ls = {
             settings = {
               Lua = {
@@ -89,22 +89,26 @@ return {
             keys = {
               { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
             },
-            root_dir = function(fname)
-              local markers = {
-                "pico_sdk_import.cmake",
-                "Makefile",
-                "configure.ac",
-                "configure.in",
-                "config.h.in",
-                "meson.build",
-                "meson_options.txt",
-                "build.ninja",
-                "compile_commands.json",
-                "compile_flags.txt",
-              }
-              local found = vim.fs.find(markers, { path = fname, upward = true })[1]
-              return found and vim.fs.dirname(found)
-            end,
+
+            root_markers = {
+              ".clangd",
+              ".clang-tidy",
+              ".clang-format",
+              "compile_commands.json",
+              "compile_flags.txt",
+              "configure.ac", -- AutoTools
+              "Makefile",
+              "configure.ac",
+              "configure.in",
+              "config.h.in",
+              "meson.build",
+              "meson_options.txt",
+              "build.ninja",
+              ".git",
+              "justfile",
+              ".jj",
+            },
+
             capabilities = {
               offsetEncoding = { "utf-16" },
             },
@@ -227,7 +231,7 @@ return {
       end
 
       if opts.inlay_hints.enabled then
-        LazyVim.lsp.on_supports_method("textDocument/inlayHint", function(_, buffer)
+        LazyVim.lsp.on_supports_method("textDocument/inlayHint", function(client, buffer)
           if
             vim.api.nvim_buf_is_valid(buffer)
             and vim.bo[buffer].buftype == ""

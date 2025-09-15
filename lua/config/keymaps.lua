@@ -322,11 +322,14 @@ nmap("<leader><leader>d", yank_all_diagnostics, { desc = "Yank all diagnostics t
 
 
 vim.keymap.set("n", "<space><space>f", function()
-  vim.fn.system(
-    "zellij run -n Yazi -c -i -- bash ~/.config/nvim/yazi-picker.sh"
-      .. vim.fn.expand("%")
-  )
+  local path = vim.fn.expand("%:p:h")
+  if path ~= "" then
+    vim.fn.jobstart({"footclient", "-e", "ynv", path}, {
+      detach = true,
+    })
+  end
 end)
+
 
 vim.keymap.set("n", "q", "<Nop>")
 vim.keymap.set("n", "Q", "<Nop>")
