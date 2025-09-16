@@ -28,8 +28,10 @@ opt.fillchars = {
   diff = "╱",
   eob = " ",
 }
+opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
 opt.foldlevel = 99
-vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+opt.foldmethod = "expr"
+opt.foldtext = ""
 opt.formatoptions = "jcroqlnt" -- tcqj
 opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
@@ -72,11 +74,6 @@ opt.winminwidth = 5 -- Minimum window width
 opt.wrap = false -- Disable line wrap
 
 opt.smoothscroll = true
-
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-
-opt.foldtext = ""
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0

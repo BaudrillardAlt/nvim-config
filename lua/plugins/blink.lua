@@ -1,7 +1,9 @@
 ---@diagnostic disable: missing-fields
 return {
   {
+
     "saghen/blink.cmp",
+    build = "cargo build --release",
     version = "*",
     opts_extend = {
       "sources.completion.enabled_providers",
@@ -47,7 +49,6 @@ return {
         menu = {
           auto_show = true,
           draw = {
-            columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
             treesitter = { "lsp" },
           },
         },
@@ -84,6 +85,32 @@ return {
         ["<Up>"] = { "select_prev", "fallback" },
         ["<C-x>"] = { "show", "show_documentation", "hide_documentation" },
         ["<C-c>"] = { "cancel", "hide", "fallback" },
+      },
+    },
+  },
+
+  -- add icons
+  {
+    "saghen/blink.cmp",
+    opts = function(_, opts)
+      opts.appearance = opts.appearance or {}
+      opts.appearance.kind_icons = vim.tbl_extend("force", opts.appearance.kind_icons or {}, LazyVim.config.icons.kinds)
+    end,
+  },
+  {
+    "saghen/blink.cmp",
+    opts = {
+      sources = {
+        per_filetype = {
+          lua = { inherit_defaults = true, "lazydev" },
+        },
+        providers = {
+          lazydev = {
+            name = "LazyDev",
+            module = "lazydev.integrations.blink",
+            score_offset = 100,
+          },
+        },
       },
     },
   },

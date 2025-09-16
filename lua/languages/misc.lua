@@ -26,7 +26,6 @@ return {
           },
         },
       }
-
       -- Markdown
       opts.servers.marksman = {}
     end,
@@ -46,4 +45,3 @@ return {
     end,
   },
 }
-

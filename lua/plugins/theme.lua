@@ -2,7 +2,7 @@ return {
 
   {
     "scottmckendry/cyberdream.nvim",
-    lazy = false,
+    lazy = true,
     opts = {
       variant = "dark",
       italic_comments = true,

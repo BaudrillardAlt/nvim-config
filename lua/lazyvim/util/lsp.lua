@@ -9,13 +9,6 @@ local function wrap(client)
   return client
 end
 
----@param opts? lsp.Client.filter
-function M.get_clients(opts)
-  opts = opts or {}
-  local ret = vim.lsp.get_clients(opts)
-  return opts.filter and vim.tbl_filter(opts.filter, ret) or ret
-end
-
 ---@param on_attach fun(client:vim.lsp.Client, buffer)
 ---@param name? string
 function M.on_attach(on_attach, name)
@@ -108,33 +101,37 @@ function M.on_supports_method(method, fn)
   })
 end
 
----@param opts? LazyFormatter| {filter?: (string|lsp.Client.filter)}
+---@param opts? LazyFormatter| {filter?: (string|vim.lsp.get_clients.Filter)}
 function M.formatter(opts)
   opts = opts or {}
   local filter = opts.filter or {}
   filter = type(filter) == "string" and { name = filter } or filter
+  ---@cast filter vim.lsp.get_clients.Filter
+  ---@type LazyFormatter
   local ret = {
     name = "LSP",
     primary = true,
     priority = 1,
     format = function(buf)
-      M.format(vim.tbl_extend("force", {}, filter, { bufnr = buf }))
+      M.format(LazyVim.merge({}, filter, { bufnr = buf }))
     end,
     sources = function(buf)
-      local clients = M.get_clients(vim.tbl_extend("force", {}, filter, { bufnr = buf }))
-      clients = vim.tbl_filter(function(client)
-        return client:supports_method("textDocument/formatting", buf)
-          or client:supports_method("textDocument/rangeFormatting", buf)
+      local clients = vim.lsp.get_clients(LazyVim.merge({}, filter, { bufnr = buf }))
+      ---@param client vim.lsp.Client
+      local ret = vim.tbl_filter(function(client)
+        return client:supports_method("textDocument/formatting")
+          or client:supports_method("textDocument/rangeFormatting")
       end, clients)
+      ---@param client vim.lsp.Client
       return vim.tbl_map(function(client)
         return client.name
-      end, clients)
+      end, ret)
     end,
   }
-  return vim.tbl_extend("force", ret, opts)
+  return LazyVim.merge(ret, opts) --[[@as LazyFormatter]]
 end
 
----@alias lsp.Client.format {timeout_ms?: number, format_options?: table} | lsp.Client.filter
+---@alias lsp.Client.format {timeout_ms?: number, format_options?: table} | vim.lsp.get_clients.Filter
 
 ---@param opts? lsp.Client.format
 function M.format(opts)
