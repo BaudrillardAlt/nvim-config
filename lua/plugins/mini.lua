@@ -1,7 +1,7 @@
 return {
   { "nvim-mini/mini.basics", version = false },
   {
-    "echasnovski/mini.comment",
+    "nvim-mini/mini.comment",
     event = "VeryLazy",
     opts = {
       options = {
@@ -13,7 +13,7 @@ return {
   },
 
   {
-    "echasnovski/mini.ai",
+    "nvim-mini/mini.ai",
     event = "VeryLazy",
     opts = function()
       local ai = require("mini.ai")
@@ -52,7 +52,7 @@ return {
     end,
   },
   {
-    "echasnovski/mini.pairs",
+    "nvim-mini/mini.pairs",
     event = "VeryLazy",
     opts = {
       modes = { insert = true, command = true, terminal = false },
@@ -78,7 +78,7 @@ return {
     },
   },
   {
-    "echasnovski/mini.move",
+    "nvim-mini/mini.move",
     event = "VeryLazy",
     opts = {},
   },
@@ -87,7 +87,7 @@ return {
   -- to select the text inside, change or modify the surrounding characters,
   -- and more.
   {
-    "echasnovski/mini.surround",
+    "nvim-mini/mini.surround",
     keys = function(_, keys)
       -- Populate the keys based on the user's options
       local opts = LazyVim.opts("mini.surround")
@@ -118,7 +118,7 @@ return {
     },
   },
   {
-    "echasnovski/mini.icons",
+    "nvim-mini/mini.icons",
     lazy = true,
     init = function()
       package.preload["nvim-web-devicons"] = function()

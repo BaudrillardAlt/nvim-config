@@ -47,8 +47,6 @@ nmap("<C-u>", "<C-u>zz", "Half-page up + center")
 nmap("gj", "10jzz", "Jump ↓ 10 + center")
 nmap("gk", "10kzz", "Jump ↑ 10 + center")
 
-nmap("zz", "zz", "Recenter screen")
-
 nmap("<leader>v", "viw", "Select inner word")
 nmap("<F2>", vim.lsp.buf.rename, "Rename symbol")
 

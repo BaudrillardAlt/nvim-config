@@ -39,7 +39,8 @@ This is a heavily customized Neovim configuration built on top of LazyVim framew
 - **Performance**: Optimized with disabled runtime plugins
 
 ### Plugin Categories
-- **LSP**: `plugins/lsp/` - Language server configurations and keymaps
+- **LSP**: `plugins/lsp/` - Core LSP configuration and keymaps
+- **Languages**: `languages/` - Language-specific configurations (auto-imported)
 - **Completion**: blink.cmp for autocompletion
 - **UI**: Custom statusline, bufferline, theming (cyberdream/modus)
 - **Search**: fzf-lua for fuzzy finding
@@ -60,11 +61,18 @@ This is a heavily customized Neovim configuration built on top of LazyVim framew
 - `<Tab>` cycles through code buffers (skips special buffers)
 - `mm` remapped to `%` for bracket matching
 
+### Language-Specific Structure
+- **Auto-Import System**: `lua/languages/init.lua` dynamically loads all language configs
+- **Individual Files**: Each language has its own file (e.g., `rust.lua`, `python.lua`, `c.lua`)
+- **Plugin Integration**: Language files can configure LSP servers, plugins, and keymaps
+- **Core LSP**: `plugins/lsp/lsp.lua` contains only general LSP configuration
+
 ## Development Guidelines
 
 When modifying this configuration:
 1. Follow the existing plugin structure in `lua/plugins/`
-2. Use LazyVim utilities where available (`LazyVim.format`, `LazyVim.root`, etc.)
-3. Maintain lazy loading patterns for performance
-4. Test with both terminal Neovim and Neovide if applicable
-5. Consider both light (modus) and dark (cyberdream) theme compatibility
+2. **Language-specific changes**: Add new files to `lua/languages/` (auto-imported)
+3. Use LazyVim utilities where available (`LazyVim.format`, `LazyVim.root`, etc.)
+4. Maintain lazy loading patterns for performance
+5. Test with both terminal Neovim and Neovide if applicable
+6. Consider both light (modus) and dark (cyberdream) theme compatibility

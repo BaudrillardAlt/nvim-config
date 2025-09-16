@@ -41,151 +41,10 @@ return {
           formatting_options = nil,
           timeout_ms = nil,
         },
-        servers = {
-          -- harper_ls = {
-          --   filetypes = { "markdown", "text" },
-          --   settings = {
-          --     ["harper-ls"] = {},
-          --   },
-          -- },
-          lua_ls = {
-            settings = {
-              Lua = {
-                workspace = { checkThirdParty = false },
-                codeLens = { enable = true },
-                completion = { callSnippet = "Replace" },
-                doc = { privateName = { "^_" } },
-                hint = {
-                  enable = true,
-                  setType = false,
-                  paramType = true,
-                  paramName = "Disable",
-                  semicolon = "Disable",
-                  arrayIndex = "Disable",
-                },
-              },
-            },
-          },
-          fish_lsp = {},
-
-          taplo = {},
-          jsonls = {
-            -- lazy-load schemastore when needed
-            on_new_config = function(new_config)
-              new_config.settings.json.schemas = new_config.settings.json.schemas or {}
-              vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
-            end,
-            settings = {
-              json = {
-                format = { enable = true },
-                validate = { enable = true },
-              },
-            },
-          },
-          marksman = {}, -- Markdown LSP
-          -- C/C++ (clangd)
-          clangd = {
-            mason = false,
-            keys = {
-              { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
-            },
-
-            root_markers = {
-              ".clangd",
-              ".clang-tidy",
-              ".clang-format",
-              "compile_commands.json",
-              "compile_flags.txt",
-              "configure.ac", -- AutoTools
-              "Makefile",
-              "configure.ac",
-              "configure.in",
-              "config.h.in",
-              "meson.build",
-              "meson_options.txt",
-              "build.ninja",
-              ".git",
-              "justfile",
-              ".jj",
-            },
-
-            capabilities = {
-              offsetEncoding = { "utf-16" },
-            },
-            cmd = (function()
-              local is_cross_compiling = vim.fn.glob("**/pico_sdk_import.cmake") ~= ""
-              local base_cmd = {
-                "clangd",
-                "--background-index",
-                "--clang-tidy",
-                "--header-insertion=iwyu",
-                "--completion-style=detailed",
-                "--function-arg-placeholders",
-                "--fallback-style=llvm",
-              }
-              if is_cross_compiling then
-                table.insert(base_cmd, "--query-driver=/usr/bin/arm-none-eabi-*")
-              end
-              return base_cmd
-            end)(),
-            init_options = {
-              usePlaceholders = true,
-              completeUnimported = true,
-              clangdFileStatus = true,
-            },
-          },
-          -- Python
-          basedpyright = {
-            enabled = true,
-            cmd = { "uv", "run", "basedpyright-langserver", "--stdio" },
-            settings = {
-              basedpyright = {
-                analysis = {
-                  typeCheckingMode = "recommended",
-                  diagnosticMode = "workspace",
-                  autoImportCompletions = true,
-                  autoSearchPaths = true,
-                },
-              },
-            },
-          },
-          ruff = {
-            enabled = true,
-            cmd = { "uv", "run", "ruff", "server" },
-            init_options = { settings = { logLevel = "error" } },
-            keys = {
-              { "<leader>co", LazyVim.lsp.action["source.organizeImports"], desc = "Organize Imports" },
-            },
-          },
-          -- Assembly
-          asm_lsp = {
-            cmd = { "asm-lsp" },
-            filetypes = { "asm", "s", "S" },
-          },
-          -- Disable conflicting servers
-          pyright = { enabled = false },
-          ruff_lsp = { enabled = false },
-        },
-        setup = {
-          clangd = function(_, server_opts)
-            local clangd_ext_opts = LazyVim.opts("clangd_extensions.nvim")
-            require("clangd_extensions").setup(
-              vim.tbl_deep_extend("force", clangd_ext_opts or {}, { server = server_opts })
-            )
-            return false
-          end,
-          ruff = function()
-            LazyVim.lsp.on_attach(function(client)
-              client.server_capabilities.hoverProvider = false
-            end, "ruff")
-          end,
-          hls = function()
-            return true
-          end,
-        },
       }
       return ret
     end,
+
     config = function(_, opts)
       LazyVim.format.register(LazyVim.lsp.formatter())
       LazyVim.lsp.on_attach(function(client, buffer)
@@ -251,20 +110,6 @@ return {
           })
         end)
       end
-    end,
-  },
-
-  {
-    "terror/just-lsp",
-    ft = { "just" },
-    config = function()
-      local lspconfig = require("lspconfig")
-      local util = require("lspconfig.util")
-      lspconfig.just.setup({
-        cmd = { "just-lsp" },
-        filetypes = { "just" },
-        root_dir = util.root_pattern(".git", ".jj"),
-      })
     end,
   },
 }

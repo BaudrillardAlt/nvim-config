@@ -161,20 +161,6 @@ return {
   },
   { "artemave/workspace-diagnostics.nvim" },
 
-  {
-    "snacks.nvim",
-    opts = {
-      bigfile = { enabled = true },
-      quickfile = { enabled = true },
-    },
-    -- stylua: ignore
-    keys = {
-      { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
-      { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
-      { "<leader>dps", function() Snacks.profiler.scratch() end, desc = "Profiler Scratch Buffer" },
-    },
-  },
-
   -- Session management. This saves your session in the background,
   -- keeping track of open buffers, window arrangement, and more.
   -- You can restore sessions when returning through the dashboard.
