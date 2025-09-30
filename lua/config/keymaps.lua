@@ -114,7 +114,10 @@ vim.keymap.set("n", "Q", "<Nop>", { desc = "Disable ex mode" })
 vim.keymap.set("n", "<space><space>f", function()
   local path = vim.fn.expand("%:p:h")
   if path ~= "" then
-    vim.fn.jobstart({ "footclient", "-a", "foot.yazi", "-e", "ynv", path }, { detach = true })
+    vim.fn.jobstart(
+      { "footclient", "-a", "foot.yazi", "-e", "/home/wasd/architect/scripts/ynv", path },
+      { detach = true }
+    )
   end
 end, { desc = "Open yazi in foot" })
 
