@@ -24,7 +24,6 @@ require("lazy").setup({
     { "mason-org/mason-lspconfig.nvim", enabled = false },
     { "mason-org/mason.nvim", enabled = false },
     { "MagicDuck/grug-far.nvim", enabled = false },
-    { "lewis6991/gitsigns.nvim", enabled = false },
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
