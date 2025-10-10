@@ -212,3 +212,5 @@ end)
 vim.keymap.set("n", "<C-->", function()
   change_scale_factor(1 / 1.25)
 end)
+
+vim.keymap.set("n", "<A-`>", "<C-o>", { noremap = true, silent = true })
