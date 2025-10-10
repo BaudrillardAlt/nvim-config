@@ -42,11 +42,9 @@ vim.keymap.set("n", "<leader><Tab>", function()
   Snacks.picker.buffers()
 end, { desc = "Buffer picker" })
 
-if not vim.g.neovide then
-  vim.keymap.set("n", "<A-S-q>", function()
-    Snacks.bufdelete({ win = true })
-  end, { desc = "Delete buffer + window" })
-end
+vim.keymap.set("n", "<A-S-q>", function()
+  Snacks.bufdelete({ win = true })
+end, { desc = "Delete buffer + window" })
 
 -- ============================================================================
 -- WINDOW MANAGEMENT
