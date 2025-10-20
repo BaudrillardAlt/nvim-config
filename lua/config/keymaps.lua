@@ -120,7 +120,7 @@ vim.keymap.set("n", "<space><space>f", function()
 end, { desc = "Open yazi in foot" })
 
 vim.keymap.set("n", "<leader>sz", function()
-  vim.fn.jobstart({ "chezmoi", "apply", "--force" }, {
+  vim.fn.jobstart({ "chezmoi", "apply" }, {
     stdout_buffered = true,
     stderr_buffered = true,
     on_stdout = function(_, data)

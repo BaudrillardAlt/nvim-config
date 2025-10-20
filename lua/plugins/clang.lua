@@ -4,6 +4,7 @@ return {
       ft = { "c", "cpp", "cuda", "proto" },
       root = {
         ".clangd",
+        "justfile",
         ".clang-tidy",
         ".clang-format",
         "compile_commands.json",
@@ -56,6 +57,7 @@ return {
             { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
           },
           root_markers = {
+            "justfile",
             "compile_commands.json",
             "compile_flags.txt",
             "configure.ac", -- AutoTools
