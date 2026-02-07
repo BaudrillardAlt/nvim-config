@@ -4,8 +4,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
-        "am",
-        "ld",
+        "asm",
         "bash",
         "fish",
         "hyprlang",
