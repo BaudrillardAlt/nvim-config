@@ -7,7 +7,10 @@ return {
     opts = {
       style = "auto",
       dim_inactive = true,
-      variant = "default",
+      variants = {
+        modus_operandi = "default", -- Set variant for `modus_operandi` style
+        modus_vivendi = "default", -- Set variant for `modus_vivendi` style
+      },
       on_highlights = function(hl, c)
         hl["@character.printf"] = { fg = c.cyan_warmer }
         hl["@lsp.typemod.function.defaultlibrary"] = { fg = c.indigo }
