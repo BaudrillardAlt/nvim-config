@@ -25,12 +25,6 @@ return {
   },
 
   {
-    "scottmckendry/cyberdream.nvim",
-    lazy = false,
-    priority = 1000,
-  },
-
-  {
     "catppuccin/nvim",
     name = "catppuccin",
     lazy = false,
@@ -93,7 +87,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "modus",
+      colorscheme = "catppuccin-nvim",
     },
   },
 }
