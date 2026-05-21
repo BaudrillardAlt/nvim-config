@@ -6,8 +6,6 @@ return {
       vim.list_extend(opts.ensure_installed, {
         "asm",
         "bash",
-        "fish",
-        "hyprlang",
         "cmake",
         "devicetree",
         "gitcommit",
@@ -15,6 +13,7 @@ return {
         "just",
         "meson",
         "ninja",
+        "nu",
         "nix",
       })
     end,

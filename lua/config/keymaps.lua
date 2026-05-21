@@ -111,15 +111,22 @@ vim.keymap.set("n", "Q", "<Nop>", { desc = "Disable ex mode" })
 
 vim.keymap.set("n", "<space><space>f", function()
   local path = vim.fn.expand("%:p:h")
-  if path ~= "" then
-    vim.fn.jobstart({ "footclient", "-a", "foot.yazi", "-e", "/home/wasd/architect/scripts/ynv", path }, {
-      detach = true,
-      env = {
-        NVIM_LISTEN_ADDRESS = vim.v.servername,
-      },
-    })
+  if path == "" then
+    return
   end
-end, { desc = "Open yazi in foot" })
+
+  vim.fn.jobstart({
+    "kitty",
+    "--single-instance",
+    "--detach",
+    "--app-id=kitty-yazi",
+    "--directory",
+    path,
+    vim.fn.stdpath("config") .. "/scripts/ynv",
+    vim.v.servername,
+    path,
+  }, { detach = true })
+end, { desc = "Open yazi in kitty" })
 
 vim.keymap.set("n", "<leader>sz", function()
   vim.fn.jobstart({ "chezmoi", "apply" }, {
@@ -212,3 +219,9 @@ vim.keymap.set("n", "<C-->", function()
 end)
 
 vim.keymap.set("n", "<A-`>", "<C-o>", { noremap = true, silent = true })
+
+vim.keymap.set("n", "<A-[>", "<C-w>h", { desc = "Focus left window" })
+vim.keymap.set("n", "<A-]>", "<C-w>l", { desc = "Focus right window" })
+
+vim.keymap.set("n", "<A-{>", "<C-w>t", { desc = "Top-left window" })
+vim.keymap.set("n", "<A-}>", "<C-w>b", { desc = "Bottom-right window" })

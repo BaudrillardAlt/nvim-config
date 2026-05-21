@@ -2,6 +2,9 @@ return {
   {
     "saghen/blink.cmp",
     opts = {
+      enabled = function()
+        return not vim.tbl_contains({ "c" }, vim.bo.filetype)
+      end,
       keymap = {
         preset = "none",
         ["<Tab>"] = { "select_next", "fallback" },
