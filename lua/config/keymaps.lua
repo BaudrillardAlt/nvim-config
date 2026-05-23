@@ -116,17 +116,15 @@ vim.keymap.set("n", "<space><space>f", function()
   end
 
   vim.fn.jobstart({
-    "kitty",
-    "--single-instance",
-    "--detach",
-    "--app-id=kitty-yazi",
-    "--directory",
+    "footclient",
+    "--app-id=foot.yazi",
+    "--working-directory",
     path,
-    vim.fn.stdpath("config") .. "/scripts/ynv",
+    "ynv",
     vim.v.servername,
     path,
   }, { detach = true })
-end, { desc = "Open yazi in kitty" })
+end, { desc = "Open yazi in foot" })
 
 vim.keymap.set("n", "<leader>sz", function()
   vim.fn.jobstart({ "chezmoi", "apply" }, {
