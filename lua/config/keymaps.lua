@@ -3,14 +3,14 @@
 -- ============================================================================
 
 local deletions = {
-  { "n", "<leader><tab>l" },
-  { "n", "<leader><tab>o" },
-  { "n", "<leader><tab>f" },
+  { "n", "<leader><space>" },
   { "n", "<leader><tab><tab>" },
+  { "n", "<leader><tab>[" },
   { "n", "<leader><tab>]" },
   { "n", "<leader><tab>d" },
-  { "n", "<leader><tab>[" },
-  { "n", "<leader><space>" },
+  { "n", "<leader><tab>f" },
+  { "n", "<leader><tab>l" },
+  { "n", "<leader><tab>o" },
 }
 
 for _, map in ipairs(deletions) do
@@ -32,6 +32,7 @@ vim.keymap.set({ "n", "v", "x" }, "mm", "%", { desc = "Match bracket", noremap =
 vim.keymap.set("n", "mc", "m", { desc = "Set mark", noremap = true, silent = true })
 vim.keymap.set("n", "m'", "'", { desc = "Jump to mark", noremap = true, silent = true })
 vim.keymap.set("n", "m`", "`", { desc = "Jump to mark (exact)", noremap = true, silent = true })
+vim.keymap.set("n", "<A-`>", "<C-o>", { noremap = true, silent = true })
 
 -- ============================================================================
 -- BUFFER MANAGEMENT
@@ -49,6 +50,8 @@ end, { desc = "Delete buffer + window" })
 -- ============================================================================
 -- WINDOW MANAGEMENT
 -- ============================================================================
+
+vim.keymap.set("n", "<A-w>", "<C-w>w", { desc = "Cycle windows" })
 
 vim.keymap.set("n", "<Tab>", function()
   local start_win = vim.api.nvim_get_current_win()
@@ -94,8 +97,8 @@ local function yank_all_diagnostics()
   vim.fn.setreg("+", table.concat(lines, "\n"))
 end
 
-vim.keymap.set("n", "<leader><leader>x", yank_line_diagnostics, { desc = "Yank line diagnostics" })
 vim.keymap.set("n", "<leader><leader>d", yank_all_diagnostics, { desc = "Yank all diagnostics" })
+vim.keymap.set("n", "<leader><leader>x", yank_line_diagnostics, { desc = "Yank line diagnostics" })
 
 -- ============================================================================
 -- TEXT OPERATIONS
@@ -109,6 +112,8 @@ vim.keymap.set("n", "Q", "<Nop>", { desc = "Disable ex mode" })
 -- EXTERNAL TOOLS
 -- ============================================================================
 
+local scripts_dir = vim.fs.joinpath(vim.fn.stdpath("config"), "scripts")
+
 vim.keymap.set("n", "<space><space>f", function()
   local path = vim.fn.expand("%:p:h")
   if path == "" then
@@ -120,11 +125,43 @@ vim.keymap.set("n", "<space><space>f", function()
     "--app-id=foot.yazi",
     "--working-directory",
     path,
-    "ynv",
+    scripts_dir .. "/y-nv",
     vim.v.servername,
     path,
   }, { detach = true })
 end, { desc = "Open yazi in foot" })
+
+local function open_scooter(search_text)
+  local root = LazyVim.root()
+  local args = {
+    "footclient",
+    "--app-id=foot",
+    "--working-directory",
+    root,
+    scripts_dir .. "/scooter-nv",
+  }
+
+  if search_text and search_text ~= "" then
+    table.insert(args, "--fixed-strings")
+    if search_text:find("\n", 1, true) then
+      table.insert(args, "--multiline")
+    end
+    vim.list_extend(args, { "--search-text", search_text })
+  end
+
+  table.insert(args, root)
+  vim.fn.jobstart(args, { detach = true })
+end
+
+vim.keymap.set("n", "<space><space>r", function()
+  open_scooter()
+end, { desc = "Open scooter in foot" })
+
+vim.keymap.set("x", "<space><space>r", function()
+  local selected_text =
+    table.concat(vim.fn.getregion(vim.fn.getpos("v"), vim.fn.getpos("."), { type = vim.fn.mode() }), "\n")
+  open_scooter(selected_text)
+end, { desc = "Search selection in scooter" })
 
 vim.keymap.set("n", "<leader>sz", function()
   vim.fn.jobstart({ "chezmoi", "apply" }, {
@@ -163,7 +200,7 @@ if vim.g.neovide then
   vim.keymap.set("n", "<A-j>", "<C-w>j", { desc = "Focus down" })
   vim.keymap.set("n", "<A-k>", "<C-w>k", { desc = "Focus up" })
   vim.keymap.set("n", "<A-l>", "<C-w>l", { desc = "Focus right" })
-  vim.keymap.set("n", "<A-Tab>", ":bnext<CR>", { desc = "Next buffer" })
+  vim.keymap.set("n", "<C-Tab>", "<C-w>w", { desc = "Cycle windows" })
 
   -- Window management
   vim.keymap.set("n", "<A-Enter>", "<C-w>v", { desc = "Split vertical" })
@@ -186,8 +223,8 @@ if vim.g.neovide then
   vim.keymap.set("n", "<A-[>", "<C-w><", { desc = "Decrease width" })
 
   -- Buffer navigation
+  vim.keymap.set("n", "<A-Tab>", ":bnext<CR>", { desc = "Next buffer" })
   vim.keymap.set("n", "<C-Enter>", ":enew<CR>", { desc = "New buffer" })
-  vim.keymap.set("n", "<C-Tab>", "<C-w>w", { desc = "Cycle windows" })
   vim.keymap.set("n", "<C-A-i>", ":bprevious<CR>", { desc = "Previous buffer" })
   vim.keymap.set("n", "<C-A-o>", ":bnext<CR>", { desc = "Next buffer" })
   vim.keymap.set("n", "<C-q>", function()
@@ -216,10 +253,8 @@ vim.keymap.set("n", "<C-->", function()
   change_scale_factor(1 / 1.25)
 end)
 
-vim.keymap.set("n", "<A-`>", "<C-o>", { noremap = true, silent = true })
-
+-- Keep after Neovide mappings so these bindings take precedence there too.
 vim.keymap.set("n", "<A-[>", "<C-w>h", { desc = "Focus left window" })
 vim.keymap.set("n", "<A-]>", "<C-w>l", { desc = "Focus right window" })
-
 vim.keymap.set("n", "<A-{>", "<C-w>t", { desc = "Top-left window" })
 vim.keymap.set("n", "<A-}>", "<C-w>b", { desc = "Bottom-right window" })

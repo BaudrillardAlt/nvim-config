@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+trap 'nirius focus -a neovide || true' EXIT
+
+scooter "$@"

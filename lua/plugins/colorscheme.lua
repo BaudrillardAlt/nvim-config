@@ -3,10 +3,9 @@ return {
   {
     "miikanissi/modus-themes.nvim",
     lazy = false,
-    dim_inactive = true,
     opts = {
       style = "auto",
-      dim_inactive = true,
+      dim_inactive = false,
       variants = {
         modus_operandi = "default", -- Set variant for `modus_operandi` style
         modus_vivendi = "tinted", -- Set variant for `modus_vivendi` style
