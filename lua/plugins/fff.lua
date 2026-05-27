@@ -6,6 +6,17 @@ return {
   opts = {
     hl = {
       normal = "Normal",
+      border = "FloatBorder",
+      title = "Title",
+    },
+
+    debug = {
+      enabled = false,
+    },
+    layout = {
+
+      prompt_position = "top",
+      flex = { size = 130, wrap = "bottom" },
     },
   },
 
@@ -13,18 +24,14 @@ return {
     {
       "<leader>ff",
       function()
-        require("fff").find_files({
-          cwd = LazyVim.root(),
-        })
+        require("fff").find_files()
       end,
       desc = "FFF files",
     },
     {
       "<leader>/",
       function()
-        require("fff").live_grep({
-          cwd = LazyVim.root(),
-        })
+        require("fff").live_grep()
       end,
       desc = "FFF grep",
     },
@@ -32,7 +39,6 @@ return {
       "<leader>fz",
       function()
         require("fff").live_grep({
-          cwd = LazyVim.root(),
           grep = { modes = { "fuzzy", "plain" } },
         })
       end,
@@ -42,7 +48,6 @@ return {
       "<leader>fc",
       function()
         require("fff").live_grep({
-          cwd = LazyVim.root(),
           query = vim.fn.expand("<cword>"),
         })
       end,
